@@ -4,8 +4,12 @@ The NTT Task Management Portal is a lightweight, web-based application designed 
 
 Key Features
 Task Creation: Users can create tasks with details such as title, start date, due date, and assignee.
+
 Task Management: Tasks can be moved between statuses (Scheduled, In Progress, Completed, Deleted) to reflect their current state.
+
 Team Management: Admins can manage team members, including adding and editing member details.
+
+
 Technology Stack
 Frontend: HTML, CSS, Bootstrap for responsive design.
 Backend: Django web framework.
@@ -17,10 +21,12 @@ Getting Started with Docker
 
 Build the Docker Image:
 Navigate to the project directory where the Dockerfile is located and run:
+
 " docker build -t ntt-task-portal . "
 
 Run the Container:
 Once the image is built, you can start the container by running:
+
 " docker run -p 8000:8000 ntt-task-portal "
 This command maps port 8000 of the container to port 8000 on your host, allowing you to access the application at http://localhost:8000.
 
