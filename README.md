@@ -1,4 +1,5 @@
-Overview
+Overview:
+
 The NTT Task Management Portal is a lightweight, web-based application designed to facilitate the tracking and management of development tasks. Built using the Django web framework, it provides an intuitive interface for managing tasks through various stages of development.
 
 Key Features
@@ -21,7 +22,6 @@ docker build -t ntt-task-portal .
 Run the Container:
 Once the image is built, you can start the container by running:
 docker run -p 8000:8000 ntt-task-portal
-
 This command maps port 8000 of the container to port 8000 on your host, allowing you to access the application at http://localhost:8000.
 
 Database Usage
@@ -33,5 +33,6 @@ The project is structured around Django’s design patterns, using the MVC archi
 Models: Define the data structures for Task and TeamMember.
 Views: Handle the business logic and interact with the models to carry data to and from the database.
 Templates: Render the data provided by views to display in the user’s browser.
+
 Conclusion
 The NTT Task Management Portal exemplifies a practical implementation of Django’s robust capabilities tailored to manage development tasks effectively. It showcases how Django can be used to build functional applications with minimal setup, making it an excellent choice for developers looking to implement fast and efficient solutions.
