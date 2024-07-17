@@ -17,11 +17,11 @@ Getting Started with Docker
 
 Build the Docker Image:
 Navigate to the project directory where the Dockerfile is located and run:
-docker build -t ntt-task-portal .
+" docker build -t ntt-task-portal . "
 
 Run the Container:
 Once the image is built, you can start the container by running:
-docker run -p 8000:8000 ntt-task-portal
+" docker run -p 8000:8000 ntt-task-portal "
 This command maps port 8000 of the container to port 8000 on your host, allowing you to access the application at http://localhost:8000.
 
 Database Usage
