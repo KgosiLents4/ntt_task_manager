@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>NTT Task Manager</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container">
+        <h1 class="text-center my-4 font-weight-bold">NTT Task Manager</h1>
+
+        <!-- Add Team Member Link -->
+        <div class="mb-3">
+            <a href="{% url 'add_team_member' %}" class="btn btn-primary">Add Team Member</a>
+        </div>
+
+        <!-- Team Members -->
+        <div class="card my-4">
+            <div class="card-header">Team Members</div>
+            <div class="card-body">
+                <ul class="list-group">
+                    {% for member in team_members %}
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            {{ member.name }} - {{ member.role }}
+                            <div>
+                                <form method="post" action="{% url 'delete_team_member' member.id %}" class="d-inline">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                                </form>
+                                <a href="{% url 'edit_team_member' member.id %}" class="btn btn-warning btn-sm">Edit</a>
+                            </div>
+                        </li>
+                    {% empty %}
+                        <li class="list-group-item">No team members yet.</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+
+        <!-- Button to add task -->
+        <div class="my-4">
+            <a href="{% url 'add_task' %}" class="btn btn-primary">Add Task</a>
+        </div>
+
+        <!-- Scheduled Tasks -->
+        <div class="card my-4">
+            <div class="card-header">Scheduled Tasks</div>
+            <div class="card-body">
+                <ul class="list-group">
+                    {% for task in scheduled_tasks %}
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            {{ task.title }}
+                            <div>
+                                {% if task.assigned_to %}
+                                    Assigned to: {{ task.assigned_to.name }}
+                                {% else %}
+                                    Not assigned
+                                {% endif %}
+                                {% if task.start_date %}
+                                    | Start Date: {{ task.start_date }}
+                                {% endif %}
+                                {% if task.due_date %}
+                                    | Due Date: {{ task.due_date }}
+                                {% endif %}
+                                <form method="post" action="{% url 'move_task_to_in_progress' task.id %}">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-info btn-sm">Move to In Progress</button>
+                                </form>
+                                <form method="post" action="{% url 'complete_task' task.id %}" class="d-inline">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-success btn-sm">Complete</button>
+                                </form>
+                                <form method="post" action="{% url 'delete_task' task.id %}" class="d-inline">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                                </form>
+                                <a href="{% url 'edit_task' task.id %}" class="btn btn-warning btn-sm">Edit</a>
+                            </div>
+                        </li>
+                    {% empty %}
+                        <li class="list-group-item">No scheduled tasks.</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+
+        <!-- In Progress Tasks -->
+        <div class="card my-4">
+            <div class="card-header">In Progress Tasks</div>
+            <div class="card-body">
+                <ul class="list-group">
+                    {% for task in tasks_in_progress %}
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            {{ task.title }} - 
+                            Assigned to: {% if task.assigned_to %}{{ task.assigned_to.name }}{% else %}Not Assigned{% endif %}
+                            <div>
+                                <form method="post" action="{% url 'complete_task' task.id %}" class="d-inline">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-success btn-sm">Complete</button>
+                                </form>
+                                <form method="post" action="{% url 'delete_task' task.id %}" class="d-inline">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                                </form>
+                                <a href="{% url 'edit_task' task.id %}" class="btn btn-warning btn-sm">Edit</a>
+                            </div>
+                        </li>
+                    {% empty %}
+                        <li class="list-group-item">No tasks in progress.</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+
+        <!-- Completed Tasks -->
+        <div class="card my-4">
+            <div class="card-header">Completed Tasks</div>
+            <div class="card-body">
+                <ul class="list-group">
+                    {% for task in completed_tasks %}
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            {{ task.title }} - 
+                            Assigned to: {% if task.assigned_to %}{{ task.assigned_to.name }}{% else %}Not Assigned{% endif %}
+                            <div>
+                                <form method="post" action="{% url 'delete_task' task.id %}" class="d-inline">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                                </form>
+                                <a href="{% url 'edit_task' task.id %}" class="btn btn-warning btn-sm">Edit</a>
+                            </div>
+                        </li>
+                    {% empty %}
+                        <li class="list-group-item">No completed tasks.</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+
+
+        <!-- Deleted Tasks -->
+        <div class="card my-4">
+            <div class="card-header">Deleted Tasks</div>
+            <div class="card-body">
+                <ul class="list-group">
+                    {% for task in deleted_tasks %}
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            {{ task.title }}
+                            {% if task.assigned_to %}
+                                - Assigned to: {{ task.assigned_to.name }}
+                            {% else %}
+                                - Not assigned
+                            {% endif %}
+                            <a href="{% url 'edit_task' task.id %}" class="btn btn-warning btn-sm">Edit</a>
+                        </li>
+                    {% empty %}
+                        <li class="list-group-item">No deleted tasks.</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+
+    <footer class="text-center text-muted mt-4 py-3">
+        Basic site built for NTT Task Management using the Django framework, created by Kgosi Lentsoane.
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</body>
+</html>

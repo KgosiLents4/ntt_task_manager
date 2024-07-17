@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Task</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
+</head>
+<body>
+    <div class="container">
+        <h1 class="text-center my-4 font-weight-bold">Edit Task</h1>
+        <div class="card">
+            <div class="card-header">Edit Task</div>
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="title">Title</label>
+                        <input type="text" name="title" id="title" class="form-control" value="{{ task.title }}" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="assigned_to">Assign To</label>
+                        <select name="assigned_to" id="assigned_to" class="form-control" required>
+                            <option value="">Select Team Member</option>
+                            {% for member in team_members %}
+                                <option value="{{ member.id }}" {% if member.id == task.assigned_to.id %}selected{% endif %}>{{ member.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="start_date">Start Date</label>
+                        <input type="text" name="start_date" id="start_date" class="form-control datepicker" value="{{ task.start_date }}">
+                    </div>
+                    <div class="form-group">
+                        <label for="due_date">Due Date</label>
+                        <input type="text" name="due_date" id="due_date" class="form-control datepicker" value="{{ task.due_date }}">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                    <a href="{% url 'index' %}" class="btn btn-secondary">Back to Menu</a>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            $('.datepicker').datepicker({
+                format: 'yyyy-mm-dd',
+                autoclose: true
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,42 @@
+<!-- tasks/task_list.html -->
+
+{% for task in tasks %}
+<div class="task-card" id="task-{{ task.id }}" draggable="true">
+    <h3>{{ task.title }}</h3>
+    <p>Status: {{ task.get_status_display }}</p>
+    <p>Assigned to: {{ task.assigned_to }}</p>
+    <p>Due Date: {{ task.due_date }}</p>
+    <div class="task-actions">
+        {% if task.status == 'scheduled' %}
+        <button onclick="updateTaskStatus({{ task.id }}, 'in_progress')">Start Task</button>
+        {% endif %}
+        <button onclick="updateTaskStatus({{ task.id }}, 'completed')">Complete Task</button>
+        <button onclick="updateTaskStatus({{ task.id }}, 'deleted')">Delete Task</button>
+    </div>
+</div>
+{% endfor %}
+
+<script>
+    function updateTaskStatus(taskId, newStatus) {
+        fetch(`/update_task_status/${taskId}/${newStatus}/`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}',
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log('Task status updated successfully:', data);
+            // Optionally update UI to reflect the new status
+        })
+        .catch(error => {
+            console.error('There was a problem with updating task status:', error);
+        });
+    }
+</script>
